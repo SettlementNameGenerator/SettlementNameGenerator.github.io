@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+	<!-- By Cameron Guthrie -->
+	<head>
+		<title>Settlement Name Generator</title>
+		<script type="text/javascript">
+			// colours that can be picked when clicking the generate button
+			var colorWheel = [
+				'rgb(22, 160, 133)',
+				'rgb(44, 62, 80)',
+				'rgb(243, 156, 18)',
+				'rgb(231, 76, 60)',
+				'rgb(155, 89, 182)',
+				'rgb(251, 105, 100)',
+				'rgb(119, 177, 169)'
+			];
+
+			// global var
+			var c = '';
+
+			// grab a new colour from the colorWheel array
+			function genColour(){
+				c = colorWheel[Math.floor(Math.random() * colorWheel.length)];
+
+				//this stops repeating colours
+				bg = document.getElementById("body").style.background;
+				if (c == bg){
+					genColour();
+				};
+
+				//output
+				return c;
+			}
+
+
+			// change the background colour to the new colour
+			function swapColour(i, c){
+				document.getElementById(i).style.background = c;
+
+				// set c to current colour so new colours can be checked against it
+				var c = c;
+			};
+
+
+			// Array of all of the prefixes that can be used when generating names (and their descriptions)
+			var prefixArray = [
+				[
+					'Ox',
+					'The prefix <b>Ox</b> was used for places where oxen could be found.'
+					
+				],
+				[
+					'Wool',
+					'The prefix <b>Wool</b> means wool is produced.'
+				],
+				[
+					'Butter',
+					'The prefix <b>Butter</b> means butter is produced.'
+				],
+				[
+					'Honey',
+					'The prefix <b>Honey</b> means honey is produced.'
+				],
+				[
+					'Chis',
+					'The prefix <b>Chis</b> means cheese is produced.'
+				],
+				[
+					'Der',
+					'The prefix <b>Der</b> was used for places where deer could be found.'
+				],
+				[
+					'Ess',
+					'The prefix <b>Ess</b> refers to the Eastlands.'
+				],
+				[
+					'Suss',
+					'The prefix <b>Suss</b> refers to the Southlands.'
+				],
+				[
+					'Wess',
+					'The prefix <b>Wess</b> refers to the Westlands.'
+				],
+				[
+					'Nor',
+					'The prefix <b>Nor</b> refers to the Northlands.'
+				],
+				[
+					'Middles',
+					'The prefix <b>Middles</b> refers to the Midlands.'
+				],
+				[
+					'Mid',
+					'The prefix <b>Mid</b> refers to the Midlands.'
+				],
+				[
+					'Barrow',
+					'The prefix <b>Barrow</b> means a wood or woodland.'
+				],
+				[
+					'New',
+					'The prefix <b>New</b> is a new settlement.'
+				],
+				[
+					'Green',
+					'The prefix <b>Green</b> is an area of fields and/or farming.'
+				],
+				[
+					'Aber',
+					'The prefix <b>Aber</b> is the mouth of a river.'
+				],
+				[
+					'Ac',
+					'The prefix <b>Ac</b> is an oak tree or acorn.'
+				],
+				[
+					'Acc',
+					'The prefix <b>Acc</b> is an oak tree or acorn.'
+				],
+				[
+					'Avon',
+					'The prefix <b>Avon</b> is a river (there are many river Avons in Britain).'
+				],
+				[
+					'Ar',
+					'The prefix <b>Ar</b> means high or height.'
+				],
+				[
+					'Ard',
+					'The prefix <b>Ard</b> means high or height.'
+				],
+				[
+					'Ash',
+					'The prefix <b>Ash</b> refers to an ash tree.'
+				],
+				[
+					'Auch',
+					'The prefix <b>Auch</b> is a field.'
+				],
+				[
+					'Ach',
+					'The prefix <b>Ach</b> is a field.'
+				],
+				[
+					'Axe',
+					'The prefix <b>Axe</b> is from acsa, meaning river.'
+				],
+				[
+					'Ex',
+					'The prefix <b>Ex</b> is from acsa, meaning river.'
+				],
+				[
+					'Ux',
+					'The prefix <b>Ux</b> is from acsa, meaning river.'
+				],
+				[
+					'Esk',
+					'The prefix <b>Esk</b> is from acsa, meaning river.'
+				],
+				[
+					'Bal',
+					'The prefix <b>Bal</b> is a farm.'
+				],
+				[
+					'Ball',
+					'The prefix <b>Ball</b> is a farm.'
+				],
+				[
+					'Bex',
+					'The prefix <b>Bex</b> means a tree or a box.'
+				],
+				[
+					'Blen',
+					'The prefix <b>Blen</b> is a fell, hill or upland.'
+				],
+				[
+					'Caer',
+					'The prefix <b>Caer</b> is a camp or fortification.'
+				],
+				[
+					'Craig',
+					'The prefix <b>Craig</b> is a jutting rock.'
+				],
+				[
+					'Cul',
+					'The prefix <b>Cul</b> means narrow.'
+				],
+				[
+					'Drum',
+					'The prefix <b>Drum</b> means ridge or back.'
+				],
+				[
+					'Eagles',
+					'The prefix <b>Eagles</b> means church from the French Eaglais.'
+				],
+				[
+					'Eccles',
+					'The prefix <b>Eccles</b> means church from the Latin Ecclesia.'
+				],
+				[
+					'Fin',
+					'The prefix <b>Fin</b> means holy or white.'
+				],
+				[
+					'Inver',
+					'The prefix <b>Inver</b> is a river mouth or confluence.'
+				],
+				[
+					'Inner',
+					'The prefix <b>Inner</b> is a river mouth or confluence.'
+				],
+				//[
+				//	'Kil',
+				//	'The prefix <b>Kil</b> is a monastic cell, old church, nook or corner.'
+				//],
+				[
+					'Kings',
+					'The prefix <b>Kings</b> is named after a (the?) king.'
+				],
+				[
+					'Queens',
+					'The prefix <b>Queens</b> is named after a (the?) queen.'
+				],
+				[
+					'Kirk',
+					'The prefix <b>Kirk</b> means church.'
+				],
+				[
+					'Knock',
+					'The prefix <b>Knock</b> is a rocky hillock or hill.'
+				],
+				[
+					'Lang',
+					'The prefix <b>Lang</b> means long.'
+				],
+				[
+					'Lin',
+					'The prefix <b>Lin</b> is a lake.'
+				],
+				[
+					'Moss',
+					'The prefix <b>Moss</b> means swamp or bog.'
+				],
+				[
+					'Pen',
+					'The prefix <b>Pen</b> means head (headland or hill), top or the end of.'
+				],
+				[
+					'Pit',
+					'The prefix <b>Pit</b> means portion, share or farm.'
+				],
+				[
+					'Shep',
+					'The prefix <b>Shep</b> means sheep.'
+				],
+				[
+					'Ship',
+					'The prefix <b>Ship</b> means sheep.'
+				],
+				[
+					'Stan',
+					'The prefix <b>Stan</b> means stone or stony.'
+				],
+				[
+					'Stow',
+					'The prefix <b>Stow</b> is a holy place of assembly.'
+				],
+				[
+					'Streat',
+					'The prefix <b>Streat</b> means road.'
+				],
+				[
+					'Sud',
+					'The prefix <b>Sud</b> means south.'
+				],
+				[
+					'Sut',
+					'The prefix <b>Sut</b> means south.'
+				],
+				[
+					'Swin',
+					'The prefix <b>Swin</b> means pigs or swing.'
+				],
+				[
+					'Swin',
+					'The prefix <b>Swin</b> means pigs or swing.'
+				],
+				[
+					'Tre',
+					'The prefix <b>Tre</b> is a settlement.'
+				],
+				[
+					'Tra',
+					'The prefix <b>Tra</b> is a settlement.'
+				],
+				[
+					'Tilly',
+					'The prefix <b>Tilly</b> means hillock.'
+				],
+				[
+					'Tullie',
+					'The prefix <b>Tullie</b> means hillock.'
+				],
+				[
+					'Weald',
+					'The prefix <b>Weald</b> means high woodland.'
+				],
+				[
+					'Win',
+					'The prefix <b>Win</b> means white.'
+				],
+				[
+					'Wim',
+					'The prefix <b>Wim</b> means white.'
+				],
+			];
+
+
+			// Array of all the suffixes that can be used when generating names (and their descriptions)
+			var suffixArray = [
+				[
+					'ing',
+					'The suffix <b>ing</b> means people of.'
+				],
+				[
+					'ings',
+					'The suffix <b>ings</b> means people of.'
+				],
+				[
+					'folk',
+					'The suffix <b>folk</b> means people of.'
+				],
+				//[
+				//	'ex',
+				//	'The suffix <b>ex</b> was used mainly for counties or large areas of land.'
+				//],
+				[
+					'bury',
+					'The suffix <b>bury</b> means a fortified place or place that is defensible.'
+				],
+				[
+					'ford',
+					'The suffix <b>ford</b> describes a shallow river crossing or area where a stream crosses a path.'
+				],
+				[
+					'ham',
+					'The suffix <b>ham</b> means village.'
+				],
+				[
+					'hamm',
+					'The suffix <b>hamm</b> can mean village but also the area inside a river bend.'
+				],
+				[
+					'hurst',
+					'The suffix <b>hurst</b> is a wooden hill or hill-fort.'
+				],
+				[
+					'leigh',
+					'The suffix <b>leigh</b> means a clearing in a forest.'
+				],
+				[
+					'lee',
+					'The suffix <b>lee</b> means a clearing in a forest.'
+				],
+				[
+					'ley',
+					'The suffix <b>ley</b> means a clearing in a forest.'
+				],
+				[
+					'mer',
+					'The suffix <b>mer</b> means a lake.'
+				],
+				[
+					'mar',
+					'The suffix <b>mar</b> means a lake.'
+				],
+				[
+					'mere',
+					'The suffix <b>mere</b> means a lake or a pool.'
+				],
+				[
+					'ney',
+					'The suffix <b>ney</b> is an island.'
+				],
+				[
+					'port',
+					'The suffix <b>port</b> is the location of a market, not always coastal though coastal markets are common.'
+				],
+				[
+					'stead',
+					'The suffix <b>stead</b> literally means place.'
+				],
+				[
+					'sted',
+					'The suffix <b>sted</b> literally means place.'
+				],
+				[
+					'stow',
+					'The suffix <b>stow</b> is a meeting place or a holy place.'
+				],
+				[
+					'stowe',
+					'The suffix <b>stowe</b> is a meeting place or a holy place.'
+				],
+				[
+					'ton',
+					'The suffix <b>ton</b> is an enclosed settlement (walled).'
+				],
+				[
+					'tun',
+					'The suffix <b>tun</b> is an enclosed settlement (walled).'
+				],
+				[
+					'wick',
+					'The suffix <b>wick</b> means farm produce.'
+				],
+				[
+					'wich',
+					'The suffix <b>wich</b> means farm produce.'
+				],
+				[
+					'by',
+					'The suffix <b>by</b> is a farm or homestead or village.'
+				],
+				[
+					'thorpe',
+					'The suffix <b>thorpe</b> is for a farm.'
+				],
+				[
+					'thorp',
+					'The suffix <b>thorp</b> is for a farm.'
+				],
+				[
+					'throp',
+					'The suffix <b>throp</b> is for a farm.'
+				],
+				[
+					'trop',
+					'The suffix <b>trop</b> is for a farm.'
+				],
+				[
+					'toft',
+					'The suffix <b>toft</b> is a plot of land or house.'
+				],
+				[
+					'tofts',
+					'The suffix <b>tofts</b> is a plot of land or house.'
+				],
+				[
+					'hus',
+					'The suffix <b>hus</b> means house.'
+				],
+				[
+					'holme',
+					'The suffix <b>holme</b> is a marshy area or islet.'
+				],
+				[
+					'orm',
+					'The suffix <b>orm</b> is a dragon or serpent.'
+				],
+				[
+					'chester',
+					'The suffix <b>chester</b> is a place built on the site of a previous settlement.'
+				],
+				[
+					'caster',
+					'The suffix <b>caster</b> is a place built on the site of a previous settlement.'
+				],
+				[
+					'cester',
+					'The suffix <b>cester</b> is a place built on the site of a previous settlement.'
+				],
+				[
+					'ock',
+					'The suffix <b>ock</b> is an oak tree or acorn.'
+				],
+				//[
+				//	'afon',
+				//	'The suffix <b>afon</b> is a river (there are many river Avons in Britain).'
+				//],
+				[
+					'ay',
+					'The suffix <b>ay</b> is an island.'
+				],
+				//[
+				//	'y',
+				//	'The suffix <b>y</b> can be an island.'
+				//],
+				[
+					'ey',
+					'The suffix <b>ey</b> is an island.'
+				],
+				[
+					'beck',
+					'The suffix <b>beck</b> is a stream.'
+				],
+				[
+					'bach',
+					'The suffix <b>bach</b> is a stream.'
+				],
+				[
+					'berg',
+					'The suffix <b>berg</b> is a hill.'
+				],
+				//[
+				//	'bergh',
+				//	'The suffix <b>bergh</b> is a hill.'
+				//],
+				[
+					'berry',
+					'The suffix <b>berry</b> is a hill.'
+				],
+				[
+					'bourne',
+					'The suffix <b>bourne</b> is a large stream or brook.'
+				],
+				[
+					'burn',
+					'The suffix <b>burn</b> is a large stream or brook.'
+				],
+				[
+					'bridge',
+					'The suffix <b>bridge</b> is where a bridge is present.'
+				],
+				[
+					'combe',
+					'The suffix <b>combe</b> means a valley or vale.'
+				],
+				[
+					'cot',
+					'The suffix <b>cot</b> is derived from coet meaning a wood.'
+				],
+				[
+					'cott',
+					'The suffix <b>cott</b> is derived from coet meaning a wood.'
+				],
+				[
+					'crag',
+					'The suffix <b>crag</b> is a jutting rock.'
+				],
+				[
+					'dale',
+					'The suffix <b>dale</b> is a valley or allotment.'
+				],
+				[
+					'don',
+					'The suffix <b>don</b> is a hill or a down.'
+				],
+				[
+					'field',
+					'The suffix <b>field</b> means open land or a forest clearing.'
+				],
+				[
+					'firth',
+					'The suffix <b>firth</b> means wood or woodland or uncultivated land with small trees and bushes at the edge of cultivated land. Especially on hillsides.'
+				],
+				[
+					'forth',
+					'The suffix <b>forth</b> is a ford, crossing or road.'
+				],
+				[
+					'foss',
+					'The suffix <b>foss</b> means waterfall.'
+				],
+				[
+					'gate',
+					'The suffix <b>gate</b> means road.'
+				],
+				[
+					'minster',
+					'The suffix <b>minster</b> is a large church or monastery.'
+				],
+				[
+					'more',
+					'The suffix <b>more</b> means large or great.'
+				],
+				[
+					'mouth',
+					'The suffix <b>mouth</b> is the mouth of a river or a bay.'
+				],
+				[
+					'ness',
+					'The suffix <b>ness</b> means promontory or headland (literally nose).'
+				],
+				[
+					'pool',
+					'The suffix <b>pool</b> means harbour.'
+				],
+				[
+					'shaw',
+					'The suffix <b>shaw</b> is a wood or a thicket.'
+				],
+				[
+					'ster',
+					'The suffix <b>ster</b> means farm.'
+				],
+				[
+					'stow',
+					'The suffix <b>stow</b> is a holy place of assembly.'
+				],
+				[
+					'rigg',
+					'The suffix <b>rigg</b> means ridge.'
+				],
+				[
+					'thwaite',
+					'The suffix <b>thwaite</b> is a forest clearing with a dwelling or parcel of land.'
+				],
+				[
+					'wold',
+					'The suffix <b>wold</b> means high woodland.'
+				],
+				[
+					'worth',
+					'The suffix <b>worth</b> means enclosure.'
+				],
+			];
+
+
+			// generate a new name (fires on page load and when the button is pressed)
+			function genName(){
+				// get a random prefix from the prefix array
+				var randomPrefix = prefixArray[Math.floor(Math.random()*prefixArray.length)];
+				// get a random suffix from the suffix array
+				var randomSuffix = suffixArray[Math.floor(Math.random()*suffixArray.length)];
+				// generate a new background colour
+				var colour = genColour();
+
+				//clone time
+				var curretPrefixSlice = randomPrefix[0].slice(0);
+				var currentSuffixSlice = randomSuffix[0].slice(0);
+
+				// SOME RULES FOR PLACE NAMES
+
+				//get rid of triple 's'
+				if(currentSuffixSlice.slice(0,1) == curretPrefixSlice.slice(-1)){
+					curretPrefixSlice = curretPrefixSlice.substring(0, curretPrefixSlice.length - 1);
+				}
+
+				//get rid of double 'ch'
+				if(currentSuffixSlice.slice(0,2) == curretPrefixSlice.slice(-2)){
+					curretPrefixSlice = curretPrefixSlice.substring(0, curretPrefixSlice.length - 2);
+				}
+
+				//no 'sch in the middle of names'
+				if(currentSuffixSlice.slice(0,2) == 'ch' && curretPrefixSlice.slice(-1) == 's'){
+					curretPrefixSlice = curretPrefixSlice.substring(0, curretPrefixSlice.length - 1);
+				}
+
+				// OUTPUT
+				// set name to prefix + suffix
+				var name = document.getElementById("name").innerHTML = curretPrefixSlice + randomSuffix[0];
+				// set text to description of prefix + description of suffix (with a space)
+				var text = document.getElementById("text").innerHTML = randomPrefix[1] + ' ' + randomSuffix[1];
+
+				// change the button colour to the new random colour
+				swapColour("generate", colour);
+				// change the page background colour to the new random colour
+				swapColour("body", colour);
+			};
+		</script>
+		<style>
+			/* generic style stuff in here */
+			* {
+				margin: 0px;
+				padding: 0px;
+				box-sizing: border-box;
+			}
+
+			body {
+				background-color: #444444;
+				color: #444444;
+				font-family: sans-serif;
+			}
+
+			.item-box {
+				margin: auto;
+				margin-top: 20%;
+				padding: 20px;
+				background-color: white;
+				text-align: center;
+				width: 400px;
+				border-radius: 3px;
+			}
+
+			.text {
+			}
+
+			.name {
+			}
+
+			/* Pure CSS (no JS) solution to have a button that 'clicks down' */
+			button {
+				position: relative;
+				height: 30px;
+				padding: 5px;
+				width: 95px;
+				margin-bottom: 10px;
+				background-color: #444444;
+				border-bottom: 4px solid #111111;
+				border-radius: 3px;
+				color: white;
+			}
+
+			button:hover {
+				cursor: pointer;
+			}
+
+			button:active {
+				top: 4px;
+				height: 26px;
+				margin-bottom: 14px;
+				border-bottom: 0px solid;
+				border-top: 2px solid white;
+			}
+
+			#button-text {
+				color: #DDDDDD;
+			}
+		</style>
+	</head>
+	<!-- page html in here, pretty simple stuff -->
+	<body id="body" onload="genName()">
+		<div class="item-box">
+			<button onclick="genName()" id="generate"><b>New Place</b></button>
+			<h2 id="name"></h2>
+			<div id="text"></div>
+		</div>
+	</body>
+</html>
